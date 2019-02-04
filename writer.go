@@ -590,7 +590,12 @@ func (p *MediaPlaylist) Encode() *bytes.Buffer {
 			p.buf.WriteString(strconv.FormatInt(seg.Offset, 10))
 			p.buf.WriteRune('\n')
 		}
-		p.buf.WriteString("#EXTINF:")
+		if seg.Prefetch {
+			p.buf.WriteString("#EXT-X-PREFETCH:")
+		} else {
+			p.buf.WriteString("#EXTINF:")
+		}
+
 		if str, ok := durationCache[seg.Duration]; ok {
 			p.buf.WriteString(str)
 		} else {
